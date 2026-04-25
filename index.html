@@ -1,0 +1,864 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Piyush Kulkarni — Portfolio</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com"/>
+  <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,400;0,700;0,900;1,400&family=DM+Sans:wght@300;400;500;600&family=Bebas+Neue&family=Cormorant+Garamond:ital,wght@1,300;1,400&display=swap" rel="stylesheet"/>
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css"/>
+  <style>
+    :root {
+      --ink: #0a0a0f;
+      --cream: #f5f0e8;
+      --gold: #c9a84c;
+      --gold-light: #e8c96a;
+      --rust: #b85c38;
+      --sage: #7a9e7e;
+      --deep: #1a1625;
+      --muted: #6b6878;
+      --white: #ffffff;
+    }
+    *, *::before, *::after { margin: 0; padding: 0; box-sizing: border-box; }
+    html { scroll-behavior: smooth; }
+    body { font-family: 'DM Sans', sans-serif; background: var(--ink); color: var(--cream); overflow-x: hidden; cursor: none; }
+
+    /* CURSOR */
+    .cursor { position: fixed; width: 12px; height: 12px; background: var(--gold); border-radius: 50%; pointer-events: none; z-index: 9999; transition: transform 0.15s ease; mix-blend-mode: difference; }
+    .cursor-ring { position: fixed; width: 40px; height: 40px; border: 1.5px solid var(--gold); border-radius: 50%; pointer-events: none; z-index: 9998; transition: transform 0.4s cubic-bezier(0.23,1,0.32,1); opacity: 0.6; }
+
+    /* NAV */
+    nav { position: fixed; top: 0; left: 0; right: 0; z-index: 1000; display: flex; justify-content: space-between; align-items: center; padding: 1.5rem 4rem; background: transparent; transition: background 0.4s; }
+    nav.scrolled { background: rgba(10,10,15,0.92); backdrop-filter: blur(20px); border-bottom: 1px solid rgba(201,168,76,0.15); }
+    .nav-logo { font-family: 'Bebas Neue', cursive; font-size: 1.8rem; color: var(--gold); letter-spacing: 3px; text-decoration: none; }
+    .nav-links { display: flex; gap: 2.5rem; list-style: none; }
+    .nav-links a { color: var(--cream); text-decoration: none; font-size: 0.85rem; letter-spacing: 1.5px; text-transform: uppercase; font-weight: 500; position: relative; transition: color 0.3s; }
+    .nav-links a::after { content: ''; position: absolute; bottom: -4px; left: 0; width: 0; height: 1px; background: var(--gold); transition: width 0.3s; }
+    .nav-links a:hover { color: var(--gold); }
+    .nav-links a:hover::after { width: 100%; }
+    .nav-cta { background: var(--gold); color: var(--ink); padding: 0.6rem 1.5rem; font-size: 0.8rem; letter-spacing: 2px; text-transform: uppercase; font-weight: 600; text-decoration: none; transition: all 0.3s; }
+    .nav-cta:hover { background: var(--gold-light); transform: translateY(-2px); }
+    .hamburger { display: none; flex-direction: column; gap: 5px; cursor: pointer; }
+    .hamburger span { width: 25px; height: 2px; background: var(--cream); transition: 0.3s; }
+
+    /* HERO */
+    #hero { min-height: 100vh; display: grid; grid-template-columns: 1fr 1fr; align-items: center; padding: 8rem 4rem 4rem; position: relative; overflow: hidden; }
+    .hero-bg { position: absolute; inset: 0; background: radial-gradient(ellipse 80% 80% at 70% 50%, #1a1625 0%, #0a0a0f 60%); }
+    .hero-grid-lines { position: absolute; inset: 0; background-image: linear-gradient(rgba(201,168,76,0.04) 1px, transparent 1px), linear-gradient(90deg, rgba(201,168,76,0.04) 1px, transparent 1px); background-size: 60px 60px; }
+    .hero-accent { position: absolute; right: -100px; top: 50%; transform: translateY(-50%); width: 600px; height: 600px; border-radius: 50%; background: radial-gradient(circle, rgba(201,168,76,0.08) 0%, transparent 70%); animation: pulse 4s ease-in-out infinite; }
+    @keyframes pulse { 0%,100%{transform:translateY(-50%) scale(1);opacity:0.5;} 50%{transform:translateY(-50%) scale(1.1);opacity:1;} }
+    .hero-content { position: relative; z-index: 1; }
+    .hero-tag { display: inline-flex; align-items: center; gap: 0.5rem; background: rgba(201,168,76,0.1); border: 1px solid rgba(201,168,76,0.3); color: var(--gold); font-size: 0.75rem; letter-spacing: 3px; text-transform: uppercase; padding: 0.4rem 1rem; margin-bottom: 2rem; animation: fadeUp 0.8s 0.2s both; }
+    .hero-tag::before { content: ''; width: 6px; height: 6px; background: var(--gold); border-radius: 50%; }
+    .hero-name { font-family: 'Playfair Display', serif; font-size: clamp(3.5rem, 7vw, 6rem); font-weight: 900; line-height: 1; color: var(--cream); animation: fadeUp 0.8s 0.4s both; }
+    .hero-name span { color: var(--gold); font-style: italic; }
+    .hero-role { font-family: 'Cormorant Garamond', serif; font-size: clamp(1.2rem, 2.5vw, 1.8rem); font-style: italic; color: var(--muted); margin: 1rem 0 2rem; animation: fadeUp 0.8s 0.6s both; }
+    .hero-shayari { font-family: 'Cormorant Garamond', serif; font-style: italic; font-size: 1.1rem; color: var(--cream); opacity: 0.7; border-left: 2px solid var(--gold); padding-left: 1rem; margin-bottom: 2.5rem; line-height: 1.8; animation: fadeUp 0.8s 0.8s both; }
+    .hero-btns { display: flex; gap: 1rem; flex-wrap: wrap; animation: fadeUp 0.8s 1s both; }
+    .btn-primary { background: var(--gold); color: var(--ink); padding: 0.9rem 2.2rem; font-weight: 600; font-size: 0.85rem; letter-spacing: 2px; text-transform: uppercase; text-decoration: none; transition: all 0.3s; position: relative; overflow: hidden; }
+    .btn-primary::before { content: ''; position: absolute; inset: 0; background: var(--gold-light); transform: scaleX(0); transform-origin: left; transition: transform 0.3s; }
+    .btn-primary:hover::before { transform: scaleX(1); }
+    .btn-primary span { position: relative; z-index: 1; }
+    .btn-secondary { border: 1px solid rgba(201,168,76,0.5); color: var(--gold); padding: 0.9rem 2.2rem; font-weight: 500; font-size: 0.85rem; letter-spacing: 2px; text-transform: uppercase; text-decoration: none; transition: all 0.3s; background: transparent; }
+    .btn-secondary:hover { background: rgba(201,168,76,0.1); }
+
+    /* HERO VISUAL — FLIP CARD */
+    .hero-visual { position: relative; z-index: 1; display: flex; justify-content: center; align-items: center; animation: fadeIn 1s 0.5s both; }
+    .profile-flip-card { width: 340px; height: 460px; perspective: 1200px; }
+    .profile-flip-inner { width: 100%; height: 100%; position: relative; transform-style: preserve-3d; transition: transform 0.9s cubic-bezier(0.175, 0.885, 0.32, 1.275); cursor: pointer; }
+    .profile-flip-card:hover .profile-flip-inner { transform: rotateY(180deg); }
+    .profile-front, .profile-back { position: absolute; inset: 0; backface-visibility: hidden; -webkit-backface-visibility: hidden; }
+
+    /* FRONT — PHOTO */
+    .profile-front { background: var(--deep); border: 1px solid rgba(201,168,76,0.2); overflow: hidden; }
+    .profile-front::before { content: ''; position: absolute; top: 15px; left: 15px; right: -15px; bottom: -15px; border: 2px solid rgba(201,168,76,0.25); z-index: -1; }
+    .profile-photo { width: 100%; height: 75%; object-fit: cover; object-position: top; display: block; }
+    .profile-photo-placeholder { width: 100%; height: 75%; background: linear-gradient(160deg, #1a1625 0%, #2d1f3d 100%); display: flex; flex-direction: column; align-items: center; justify-content: center; gap: 0.8rem; }
+    .profile-photo-placeholder .avatar-icon { font-size: 5rem; opacity: 0.6; }
+    .profile-photo-placeholder .avatar-hint { font-size: 0.7rem; letter-spacing: 2px; text-transform: uppercase; color: var(--gold); opacity: 0.6; }
+    .profile-front-info { padding: 1.2rem 1.5rem; }
+    .profile-front-name { font-family: 'Playfair Display', serif; font-size: 1.3rem; color: var(--cream); font-weight: 700; }
+    .profile-front-role { font-size: 0.75rem; letter-spacing: 2px; text-transform: uppercase; color: var(--gold); margin-top: 0.2rem; }
+    .profile-flip-hint { font-size: 0.6rem; letter-spacing: 2px; text-transform: uppercase; color: rgba(201,168,76,0.4); margin-top: 0.5rem; display: flex; align-items: center; gap: 0.3rem; }
+    .profile-flip-hint i { animation: spinSlow 4s linear infinite; }
+    @keyframes spinSlow { from{transform:rotate(0deg);}to{transform:rotate(360deg);} }
+
+    /* BACK — INFO */
+    .profile-back { background: linear-gradient(135deg, #1a1625 0%, #2a1f38 100%); border: 1px solid rgba(201,168,76,0.35); transform: rotateY(180deg); display: flex; flex-direction: column; justify-content: center; padding: 2.5rem 2rem; }
+    .profile-back-avatar { width: 80px; height: 80px; border-radius: 50%; border: 2px solid var(--gold); margin: 0 auto 1.5rem; overflow: hidden; background: var(--deep); display: flex; align-items: center; justify-content: center; font-size: 2.5rem; }
+    .profile-back-avatar img { width: 100%; height: 100%; object-fit: cover; }
+    .profile-back-name { font-family: 'Playfair Display', serif; font-size: 1.4rem; color: var(--gold); text-align: center; font-style: italic; margin-bottom: 0.3rem; }
+    .profile-back-college { font-size: 0.7rem; letter-spacing: 2px; text-transform: uppercase; color: var(--muted); text-align: center; margin-bottom: 1.5rem; }
+    .profile-back-divider { width: 40px; height: 1px; background: var(--gold); margin: 0 auto 1.5rem; }
+    .profile-info-list { display: flex; flex-direction: column; gap: 0.9rem; }
+    .profile-info-row { display: flex; align-items: flex-start; gap: 0.8rem; }
+    .profile-info-icon { color: var(--gold); font-size: 0.8rem; margin-top: 2px; width: 14px; flex-shrink: 0; }
+    .profile-info-text { font-size: 0.82rem; color: var(--cream); line-height: 1.4; }
+    .profile-info-label { font-size: 0.6rem; letter-spacing: 1.5px; text-transform: uppercase; color: var(--muted); display: block; margin-bottom: 1px; }
+    .profile-hobbies-mini { display: flex; flex-wrap: wrap; gap: 0.4rem; margin-top: 1.5rem; }
+    .profile-hobby-mini { font-size: 0.65rem; letter-spacing: 1px; text-transform: uppercase; border: 1px solid rgba(201,168,76,0.25); color: var(--gold); padding: 0.2rem 0.5rem; }
+
+    /* HERO STATS */
+    .hero-stats-row { display: flex; gap: 1rem; margin-top: 1.5rem; }
+    .stat-card { background: var(--deep); border: 1px solid rgba(201,168,76,0.2); padding: 0.8rem 1.2rem; text-align: center; flex: 1; }
+    .stat-num { font-family: 'Bebas Neue'; font-size: 2rem; color: var(--gold); line-height: 1; }
+    .stat-label { font-size: 0.6rem; letter-spacing: 2px; text-transform: uppercase; color: var(--muted); }
+
+    .scroll-indicator { position: absolute; bottom: 2rem; left: 50%; transform: translateX(-50%); display: flex; flex-direction: column; align-items: center; gap: 0.5rem; color: var(--muted); font-size: 0.7rem; letter-spacing: 2px; text-transform: uppercase; z-index: 2; animation: bounce 2s ease-in-out infinite; }
+    @keyframes bounce { 0%,100%{transform:translateX(-50%) translateY(0);} 50%{transform:translateX(-50%) translateY(8px);} }
+    .scroll-line { width: 1px; height: 50px; background: linear-gradient(to bottom, var(--gold), transparent); }
+
+    @keyframes fadeUp { from{opacity:0;transform:translateY(30px);}to{opacity:1;transform:translateY(0);} }
+    @keyframes fadeIn { from{opacity:0;}to{opacity:1;} }
+
+    /* SECTIONS */
+    section { padding: 7rem 4rem; position: relative; }
+    .section-label { font-size: 0.7rem; letter-spacing: 4px; text-transform: uppercase; color: var(--gold); margin-bottom: 0.5rem; display: flex; align-items: center; gap: 1rem; }
+    .section-label::after { content: ''; flex: 0 0 40px; height: 1px; background: var(--gold); }
+    .section-title { font-family: 'Playfair Display', serif; font-size: clamp(2.5rem, 5vw, 4rem); font-weight: 700; line-height: 1.1; margin-bottom: 1.5rem; }
+    .section-subtitle { color: var(--muted); max-width: 550px; line-height: 1.8; font-size: 1rem; }
+
+    /* ABOUT */
+    #about { background: var(--ink); }
+    .about-grid { display: grid; grid-template-columns: 1fr 1.2fr; gap: 6rem; align-items: center; margin-top: 5rem; }
+    .about-img-container { position: relative; }
+    .about-img-box { width: 100%; aspect-ratio: 3/4; background: linear-gradient(160deg, #1a1625, #2d1f3d); display: flex; align-items: center; justify-content: center; position: relative; overflow: hidden; }
+    .about-img-box img { width: 100%; height: 100%; object-fit: cover; object-position: top; display: block; }
+    .about-img-box .no-photo { font-size: 7rem; }
+    .about-img-box::before { content: 'PK'; position: absolute; bottom: -20px; right: -20px; font-family: 'Bebas Neue'; font-size: 10rem; color: rgba(201,168,76,0.05); line-height: 1; }
+    .about-decoration { position: absolute; top: -20px; left: -20px; width: 120px; height: 120px; border-top: 3px solid var(--gold); border-left: 3px solid var(--gold); }
+    .about-decoration-2 { position: absolute; bottom: -20px; right: -20px; width: 120px; height: 120px; border-bottom: 3px solid var(--rust); border-right: 3px solid var(--rust); }
+    .about-text p { color: var(--muted); line-height: 1.9; margin-bottom: 1.5rem; }
+    .about-details { display: grid; grid-template-columns: 1fr 1fr; gap: 1rem; margin: 2rem 0; }
+    .detail-item { display: flex; flex-direction: column; gap: 0.2rem; }
+    .detail-label { font-size: 0.7rem; letter-spacing: 2px; text-transform: uppercase; color: var(--gold); }
+    .detail-value { color: var(--cream); font-size: 0.95rem; }
+    .hobbies-row { display: flex; gap: 0.8rem; flex-wrap: wrap; margin-top: 1rem; }
+    .hobby-tag { display: flex; align-items: center; gap: 0.4rem; border: 1px solid rgba(201,168,76,0.3); color: var(--cream); padding: 0.4rem 0.9rem; font-size: 0.8rem; letter-spacing: 1px; transition: all 0.3s; }
+    .hobby-tag:hover { background: rgba(201,168,76,0.1); border-color: var(--gold); color: var(--gold); transform: translateY(-2px); }
+    .hobby-tag i { color: var(--gold); font-size: 0.75rem; }
+
+    /* SKILLS */
+    #skills { background: var(--deep); }
+    .skills-intro { display: grid; grid-template-columns: 1fr 1fr; gap: 4rem; align-items: start; margin-bottom: 5rem; }
+    .skill-bars { display: flex; flex-direction: column; gap: 1.5rem; }
+    .skill-bar-top { display: flex; justify-content: space-between; margin-bottom: 0.5rem; }
+    .skill-bar-name { font-size: 0.8rem; letter-spacing: 1.5px; text-transform: uppercase; color: var(--cream); }
+    .skill-bar-pct { font-size: 0.8rem; color: var(--gold); font-family: 'Bebas Neue'; letter-spacing: 1px; }
+    .skill-bar-track { height: 3px; background: rgba(255,255,255,0.06); }
+    .skill-bar-fill { height: 100%; background: linear-gradient(90deg, var(--gold), var(--gold-light)); width: 0; transition: width 1.5s cubic-bezier(0.25,0.46,0.45,0.94); }
+
+    /* FLIP CARDS — CERTIFICATES */
+    #certificates { background: var(--ink); }
+    .flip-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(260px, 1fr)); gap: 2rem; margin-top: 4rem; }
+    .flip-card { height: 320px; perspective: 1200px; }
+    .flip-card-inner { width: 100%; height: 100%; position: relative; transform-style: preserve-3d; transition: transform 0.8s cubic-bezier(0.175, 0.885, 0.32, 1.275); cursor: pointer; }
+    .flip-card:hover .flip-card-inner { transform: rotateY(180deg); }
+    .flip-front, .flip-back { position: absolute; inset: 0; backface-visibility: hidden; -webkit-backface-visibility: hidden; display: flex; flex-direction: column; align-items: center; justify-content: center; padding: 2rem; border: 1px solid rgba(201,168,76,0.15); }
+    .flip-front { background: var(--deep); text-align: center; }
+    .flip-back { background: linear-gradient(135deg, #1a1625, #2a1f38); transform: rotateY(180deg); border-color: rgba(201,168,76,0.4); text-align: center; }
+    .flip-icon { font-size: 3rem; margin-bottom: 1rem; }
+    .flip-org { font-size: 0.65rem; letter-spacing: 3px; text-transform: uppercase; color: var(--gold); margin-bottom: 0.5rem; }
+    .flip-title { font-family: 'Playfair Display', serif; font-size: 1.1rem; color: var(--cream); font-weight: 700; line-height: 1.3; }
+    .flip-back-title { font-family: 'Playfair Display', serif; font-size: 1rem; color: var(--gold); margin-bottom: 0.8rem; font-style: italic; }
+    .flip-back-desc { font-size: 0.85rem; color: var(--muted); line-height: 1.7; margin-bottom: 1rem; }
+    .flip-badge { display: inline-block; background: rgba(201,168,76,0.15); border: 1px solid var(--gold); color: var(--gold); padding: 0.3rem 0.8rem; font-size: 0.7rem; letter-spacing: 2px; text-transform: uppercase; }
+    .flip-hint { font-size: 0.65rem; letter-spacing: 2px; text-transform: uppercase; color: rgba(201,168,76,0.4); margin-top: 1.5rem; display: flex; align-items: center; gap: 0.3rem; }
+    .flip-hint i { animation: spinSlow 3s linear infinite; }
+
+    /* PROJECTS */
+    #projects { background: var(--deep); }
+    .projects-filter { display: flex; gap: 0.5rem; margin: 3rem 0 2rem; flex-wrap: wrap; }
+    .filter-btn { padding: 0.5rem 1.2rem; font-size: 0.75rem; letter-spacing: 1.5px; text-transform: uppercase; border: 1px solid rgba(201,168,76,0.2); background: transparent; color: var(--muted); cursor: pointer; transition: all 0.3s; }
+    .filter-btn.active, .filter-btn:hover { border-color: var(--gold); color: var(--gold); background: rgba(201,168,76,0.05); }
+    .projects-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(300px, 1fr)); gap: 2rem; }
+    .project-card { background: rgba(255,255,255,0.02); border: 1px solid rgba(255,255,255,0.06); overflow: hidden; transition: transform 0.4s, border-color 0.4s; position: relative; }
+    .project-card:hover { transform: translateY(-8px); border-color: rgba(201,168,76,0.3); }
+    .project-img { height: 200px; background: linear-gradient(135deg, #1a1625, #2a1a35); display: flex; align-items: center; justify-content: center; font-size: 4rem; position: relative; overflow: hidden; }
+    .project-img::after { content: ''; position: absolute; inset: 0; background: linear-gradient(to top, rgba(10,10,15,0.8), transparent 50%); }
+    .project-overlay { position: absolute; inset: 0; background: rgba(201,168,76,0.08); display: flex; align-items: center; justify-content: center; opacity: 0; transition: opacity 0.3s; }
+    .project-card:hover .project-overlay { opacity: 1; }
+    .project-body { padding: 1.5rem; }
+    .project-tags { display: flex; gap: 0.4rem; flex-wrap: wrap; margin-bottom: 0.8rem; }
+    .project-tag { font-size: 0.65rem; letter-spacing: 1.5px; text-transform: uppercase; color: var(--gold); background: rgba(201,168,76,0.08); padding: 0.2rem 0.6rem; }
+    .project-name { font-family: 'Playfair Display', serif; font-size: 1.2rem; color: var(--cream); margin-bottom: 0.5rem; }
+    .project-desc { color: var(--muted); font-size: 0.87rem; line-height: 1.7; }
+    .project-links { display: flex; gap: 1rem; margin-top: 1rem; }
+    .project-link { color: var(--gold); font-size: 0.75rem; text-decoration: none; letter-spacing: 1px; text-transform: uppercase; transition: opacity 0.2s; display: flex; align-items: center; gap: 0.3rem; }
+    .project-link:hover { opacity: 0.7; }
+
+    /* SHAYARI */
+    #shayari { background: var(--ink); text-align: center; padding: 6rem 4rem; }
+    .shayari-container { max-width: 700px; margin: 0 auto; }
+    .shayari-decoration { font-family: 'Bebas Neue'; font-size: 8rem; color: rgba(201,168,76,0.05); line-height: 1; margin-bottom: -3rem; }
+    .shayari-poem { font-family: 'Cormorant Garamond', serif; font-style: italic; font-size: clamp(1.4rem, 3vw, 2rem); line-height: 2; color: var(--cream); position: relative; z-index: 1; }
+    .shayari-poem .line { display: block; opacity: 0; transform: translateY(10px); transition: all 0.6s; }
+    .shayari-poem .line.visible { opacity: 1; transform: translateY(0); }
+    .shayari-divider { width: 60px; height: 1px; background: var(--gold); margin: 2rem auto; }
+    .shayari-author { font-size: 0.75rem; letter-spacing: 3px; text-transform: uppercase; color: var(--gold); }
+    .shayari-dots { display: flex; gap: 0.8rem; justify-content: center; margin-top: 2rem; }
+    .shayari-dot { width: 6px; height: 6px; border-radius: 50%; background: rgba(201,168,76,0.2); cursor: pointer; transition: background 0.3s; }
+    .shayari-dot.active { background: var(--gold); }
+
+    /* ACHIEVEMENTS */
+    #achievements { background: var(--deep); }
+    .achievements-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(280px, 1fr)); gap: 2rem; margin-top: 4rem; }
+    .achievement-card { background: rgba(255,255,255,0.02); border: 1px solid rgba(255,255,255,0.06); padding: 2rem; transition: all 0.4s; position: relative; overflow: hidden; }
+    .achievement-card::before { content: ''; position: absolute; top: 0; left: 0; width: 3px; height: 0; background: var(--gold); transition: height 0.4s; }
+    .achievement-card:hover::before { height: 100%; }
+    .achievement-card:hover { border-color: rgba(201,168,76,0.2); transform: translateX(4px); }
+    .achievement-num { font-family: 'Bebas Neue'; font-size: 4rem; color: rgba(201,168,76,0.08); line-height: 1; position: absolute; top: 1rem; right: 1rem; }
+    .achievement-icon { font-size: 2rem; margin-bottom: 1rem; color: var(--gold); }
+    .achievement-title { font-family: 'Playfair Display', serif; font-size: 1.1rem; color: var(--cream); margin-bottom: 0.5rem; }
+    .achievement-desc { color: var(--muted); font-size: 0.87rem; line-height: 1.7; }
+
+    /* CONTACT */
+    #contact { background: var(--ink); }
+    .contact-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 6rem; margin-top: 5rem; }
+    .contact-info { display: flex; flex-direction: column; gap: 2rem; }
+    .contact-item { display: flex; align-items: flex-start; gap: 1.2rem; }
+    .contact-icon { width: 48px; height: 48px; border: 1px solid rgba(201,168,76,0.3); display: flex; align-items: center; justify-content: center; color: var(--gold); flex-shrink: 0; transition: all 0.3s; }
+    .contact-item:hover .contact-icon { background: var(--gold); color: var(--ink); }
+    .contact-detail h4 { color: var(--cream); font-size: 0.85rem; letter-spacing: 1px; text-transform: uppercase; margin-bottom: 0.3rem; }
+    .contact-detail p { color: var(--muted); font-size: 0.9rem; }
+    .contact-social { display: flex; gap: 1rem; margin-top: 2rem; }
+    .social-link { width: 44px; height: 44px; border: 1px solid rgba(255,255,255,0.1); display: flex; align-items: center; justify-content: center; color: var(--muted); text-decoration: none; transition: all 0.3s; }
+    .social-link:hover { border-color: var(--gold); color: var(--gold); transform: translateY(-4px); }
+    .contact-form { display: flex; flex-direction: column; gap: 1.2rem; }
+    .form-row { display: grid; grid-template-columns: 1fr 1fr; gap: 1.2rem; }
+    .form-group { display: flex; flex-direction: column; gap: 0.4rem; }
+    .form-label { font-size: 0.7rem; letter-spacing: 2px; text-transform: uppercase; color: var(--gold); }
+    .form-input, .form-textarea { background: rgba(255,255,255,0.03); border: 1px solid rgba(255,255,255,0.08); color: var(--cream); padding: 0.9rem 1rem; font-family: 'DM Sans', sans-serif; font-size: 0.9rem; transition: border-color 0.3s; resize: none; outline: none; }
+    .form-input:focus, .form-textarea:focus { border-color: rgba(201,168,76,0.5); background: rgba(201,168,76,0.02); }
+    .form-textarea { height: 130px; }
+    .form-btn { background: var(--gold); color: var(--ink); border: none; padding: 1rem 2rem; font-size: 0.85rem; letter-spacing: 2px; text-transform: uppercase; font-weight: 600; cursor: pointer; transition: all 0.3s; font-family: 'DM Sans', sans-serif; align-self: flex-start; }
+    .form-btn:hover { background: var(--gold-light); transform: translateY(-2px); }
+    .form-success { display: none; color: var(--sage); font-size: 0.9rem; letter-spacing: 1px; }
+
+    /* FOOTER */
+    footer { background: var(--deep); border-top: 1px solid rgba(201,168,76,0.1); padding: 3rem 4rem; display: flex; justify-content: space-between; align-items: center; }
+    .footer-logo { font-family: 'Bebas Neue'; font-size: 1.5rem; color: var(--gold); letter-spacing: 3px; }
+    .footer-copy { color: var(--muted); font-size: 0.8rem; letter-spacing: 1px; }
+    .footer-heart { color: var(--rust); }
+    .footer-back { width: 44px; height: 44px; border: 1px solid rgba(201,168,76,0.3); display: flex; align-items: center; justify-content: center; color: var(--gold); text-decoration: none; transition: all 0.3s; }
+    .footer-back:hover { background: var(--gold); color: var(--ink); }
+
+    /* MISC */
+    .progress-bar { position: fixed; top: 0; left: 0; height: 3px; background: var(--gold); z-index: 10000; width: 0; transition: width 0.1s; }
+    .reveal { opacity: 0; transform: translateY(40px); transition: opacity 0.8s, transform 0.8s; }
+    .reveal.visible { opacity: 1; transform: translateY(0); }
+    .reveal-left { opacity: 0; transform: translateX(-40px); transition: opacity 0.8s, transform 0.8s; }
+    .reveal-left.visible { opacity: 1; transform: translateX(0); }
+    .reveal-right { opacity: 0; transform: translateX(40px); transition: opacity 0.8s, transform 0.8s; }
+    .reveal-right.visible { opacity: 1; transform: translateX(0); }
+
+    /* MOBILE */
+    @media (max-width: 900px) {
+      nav { padding: 1.2rem 2rem; }
+      .nav-links { display: none; }
+      .hamburger { display: flex; }
+      #hero { grid-template-columns: 1fr; padding: 7rem 2rem 4rem; }
+      .hero-visual { display: none; }
+      section { padding: 5rem 2rem; }
+      .about-grid, .contact-grid, .skills-intro { grid-template-columns: 1fr; gap: 3rem; }
+      .form-row { grid-template-columns: 1fr; }
+      footer { flex-direction: column; gap: 1rem; text-align: center; }
+    }
+    .mobile-menu { position: fixed; inset: 0; background: var(--ink); z-index: 999; display: flex; flex-direction: column; align-items: center; justify-content: center; gap: 2rem; opacity: 0; pointer-events: none; transition: opacity 0.3s; }
+    .mobile-menu.open { opacity: 1; pointer-events: all; }
+    .mobile-menu a { font-family: 'Playfair Display', serif; font-size: 2rem; color: var(--cream); text-decoration: none; transition: color 0.3s; }
+    .mobile-menu a:hover { color: var(--gold); }
+  </style>
+</head>
+<body>
+
+<div class="progress-bar" id="progressBar"></div>
+<div class="cursor" id="cursor"></div>
+<div class="cursor-ring" id="cursorRing"></div>
+
+<!-- NAV -->
+<nav id="navbar">
+  <a href="#hero" class="nav-logo">PK</a>
+  <ul class="nav-links">
+    <li><a href="#about">About</a></li>
+    <li><a href="#skills">Skills</a></li>
+    <li><a href="#certificates">Certificates</a></li>
+    <li><a href="#projects">Projects</a></li>
+    <li><a href="#shayari">Shayari</a></li>
+    <li><a href="#achievements">Achievements</a></li>
+  </ul>
+  <a href="#contact" class="nav-cta">Contact</a>
+  <div class="hamburger" id="hamburger"><span></span><span></span><span></span></div>
+</nav>
+
+<div class="mobile-menu" id="mobileMenu">
+  <a href="#about" onclick="closeMobile()">About</a>
+  <a href="#skills" onclick="closeMobile()">Skills</a>
+  <a href="#certificates" onclick="closeMobile()">Certificates</a>
+  <a href="#projects" onclick="closeMobile()">Projects</a>
+  <a href="#shayari" onclick="closeMobile()">Shayari</a>
+  <a href="#contact" onclick="closeMobile()">Contact</a>
+</div>
+
+<!-- ═══════════ HERO ═══════════ -->
+<section id="hero">
+  <div class="hero-bg"></div>
+  <div class="hero-grid-lines"></div>
+  <div class="hero-accent"></div>
+
+  <div class="hero-content">
+    <div class="hero-tag">IT Student @ MITAOE, Pune</div>
+    <h1 class="hero-name">Piyush<br><span>Kulkarni</span></h1>
+    <p class="hero-role">Developer · Shayar · Cricket Enthusiast</p>
+    <div class="hero-shayari">
+      "Kuch sapne aankhon mein hain, kuch dil mein hai,<br/>
+      Zindagi ka safar abhi shuru hi hua hai."
+    </div>
+    <div class="hero-btns">
+      <a href="#projects" class="btn-primary"><span>View My Work</span></a>
+      <a href="#contact" class="btn-secondary">Get In Touch</a>
+    </div>
+    <div class="hero-stats-row">
+      <div class="stat-card"><div class="stat-num">7</div><div class="stat-label">Certifications</div></div>
+      <div class="stat-card"><div class="stat-num">IT</div><div class="stat-label">Branch</div></div>
+      <div class="stat-card"><div class="stat-num">∞</div><div class="stat-label">Shayaris</div></div>
+    </div>
+  </div>
+
+  <!-- PROFILE FLIP CARD -->
+    <div class="hero-visual">
+      <div class="profile-flip-card">
+        <div class="profile-flip-inner">
+
+          <div class="profile-front">
+    <img src="{{ url_for('static', filename='images/profile.jpeg') }}" alt="Piyush Kulkarni" class="profile-photo">
+    
+    <div class="profile-front-info">
+      <div class="profile-front-name">Piyush Kulkarni</div>
+      <div class="profile-front-role">IT Student · MITAOE</div>
+      <div class="profile-flip-hint"><i class="fas fa-sync-alt"></i> Hover for info</div>
+    </div>
+  </div>
+
+        <!-- BACK: Basic Info -->
+        <div class="profile-back">
+          <div class="profile-back-avatar">
+            <img src="/static/images/profile.jpeg" alt="PK"> 
+            👤
+          </div>
+          <div class="profile-back-name">Piyush Kulkarni</div>
+          <div class="profile-back-college">MIT Academy of Engineering, Pune</div>
+          <div class="profile-back-divider"></div>
+          <div class="profile-info-list">
+            <div class="profile-info-row">
+              <i class="fas fa-graduation-cap profile-info-icon"></i>
+              <div class="profile-info-text">
+                <span class="profile-info-label">Branch</span>
+                Information Technology (IT)
+              </div>
+            </div>
+            <div class="profile-info-row">
+              <i class="fas fa-university profile-info-icon"></i>
+              <div class="profile-info-text">
+                <span class="profile-info-label">College</span>
+                MITAOE, Alandi, Pune
+              </div>
+            </div>
+            <div class="profile-info-row">
+              <i class="fas fa-map-marker-alt profile-info-icon"></i>
+              <div class="profile-info-text">
+                <span class="profile-info-label">Location</span>
+                Pune, Maharashtra, India
+              </div>
+            </div>
+            <div class="profile-info-row">
+              <i class="fas fa-certificate profile-info-icon"></i>
+              <div class="profile-info-text">
+                <span class="profile-info-label">Certifications</span>
+                7 Verified Credentials
+              </div>
+            </div>
+          </div>
+          <div class="profile-hobbies-mini">
+            <span class="profile-hobby-mini">✍ Shayari</span>
+            <span class="profile-hobby-mini">🏏 Cricket</span>
+            <span class="profile-hobby-mini">💻 Coding</span>
+            <span class="profile-hobby-mini">📚 Reading</span>
+          </div>
+        </div>
+
+      </div>
+    </div>
+  </div>
+
+  <div class="scroll-indicator">
+    <div class="scroll-line"></div>
+    <span>Scroll</span>
+  </div>
+</section>
+
+<!-- ═══════════ ABOUT ═══════════ -->
+<section id="about">
+  <div class="section-label reveal">About Me</div>
+  <h2 class="section-title reveal">The Story<br/><em>Behind the Code</em></h2>
+
+  <div class="about-grid">
+    <div class="about-img-container reveal-left">
+      <div class="about-decoration"></div>
+      <div class="about-img-box">
+        
+          TO ADD PHOTO: uncomment below and delete the .no-photo div
+          <img src="/static/images/profile.jpeg" alt="Piyush Kulkarni">
+        
+        <span class="no-photo">👨‍💻</span>
+      </div>
+      <div class="about-decoration-2"></div>
+    </div>
+
+    <div class="about-text reveal-right">
+      <p>I'm <strong style="color:var(--cream)">Piyush Kulkarni</strong>, a passionate IT student at <strong style="color:var(--cream)">MIT Academy of Engineering, Pune</strong>. I love building things — whether it's code, cricket strategies, or heartfelt shayaries.</p>
+      <p>I believe technology and creativity go hand in hand. My journey at MITAOE has been about more than just academics — it's about discovering who I am through every project, poem, and match I play.</p>
+
+      <div class="about-details">
+        <div class="detail-item">
+          <span class="detail-label">Name</span>
+          <span class="detail-value">Piyush Kulkarni</span>
+        </div>
+        <div class="detail-item">
+          <span class="detail-label">College</span>
+          <span class="detail-value">MITAOE, Pune</span>
+        </div>
+        <div class="detail-item">
+          <span class="detail-label">Branch</span>
+          <span class="detail-value">Information Technology</span>
+        </div>
+        <div class="detail-item">
+          <span class="detail-label">City</span>
+          <span class="detail-value">Pune, Maharashtra</span>
+        </div>
+        <div class="detail-item">
+          <span class="detail-label">Email</span>
+          <span class="detail-value">piyushkulkarni036@email.com</span>
+        </div>
+        <div class="detail-item">
+          <span class="detail-label">Phone</span>
+          <span class="detail-value">+91 XXXXX XXXXX</span>
+        </div>
+      </div>
+
+      <div class="hobbies-row">
+        <div class="hobby-tag"><i class="fas fa-feather-alt"></i> Writing Shayaries</div>
+        <div class="hobby-tag"><i class="fas fa-baseball-ball"></i> Cricket</div>
+        <div class="hobby-tag"><i class="fas fa-code"></i> Coding</div>
+        <div class="hobby-tag"><i class="fas fa-music"></i> Music</div>
+        <div class="hobby-tag"><i class="fas fa-book"></i> Reading</div>
+        <div class="hobby-tag"><i class="fas fa-robot"></i> AI/ML</div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ═══════════ SKILLS ═══════════ -->
+<section id="skills">
+  <div class="section-label reveal">What I Know</div>
+  <h2 class="section-title reveal">Skills &<br/><em>Expertise</em></h2>
+  <div class="skills-intro">
+    <div class="reveal-left">
+      <p class="section-subtitle">A blend of technical and creative skills, built through certifications at Anthropic, Cisco, and NASSCOM — plus hands-on projects at MITAOE.</p>
+    </div>
+    <div class="skill-bars reveal-right" id="skillBars">
+      <div class="skill-bar-item">
+        <div class="skill-bar-top"><span class="skill-bar-name">Python</span><span class="skill-bar-pct">85%</span></div>
+        <div class="skill-bar-track"><div class="skill-bar-fill" data-width="85"></div></div>
+      </div>
+      <div class="skill-bar-item">
+        <div class="skill-bar-top"><span class="skill-bar-name">Artificial Intelligence</span><span class="skill-bar-pct">80%</span></div>
+        <div class="skill-bar-track"><div class="skill-bar-fill" data-width="80"></div></div>
+      </div>
+      <div class="skill-bar-item">
+        <div class="skill-bar-top"><span class="skill-bar-name">HTML / CSS / JS</span><span class="skill-bar-pct">75%</span></div>
+        <div class="skill-bar-track"><div class="skill-bar-fill" data-width="75"></div></div>
+      </div>
+      <div class="skill-bar-item">
+        <div class="skill-bar-top"><span class="skill-bar-name">Digital Literacy</span><span class="skill-bar-pct">80%</span></div>
+        <div class="skill-bar-track"><div class="skill-bar-fill" data-width="80"></div></div>
+      </div>
+      <div class="skill-bar-item">
+        <div class="skill-bar-top"><span class="skill-bar-name">Creative Writing / Shayari</span><span class="skill-bar-pct">95%</span></div>
+        <div class="skill-bar-track"><div class="skill-bar-fill" data-width="95"></div></div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ═══════════ CERTIFICATES ═══════════ -->
+<section id="certificates">
+  <div class="section-label reveal">Verified Learning</div>
+  <h2 class="section-title reveal">Certificates &<br/><em>Credentials</em></h2>
+  <p class="section-subtitle reveal">Hover each card to explore the details of my certified achievements.</p>
+
+  <div class="flip-grid">
+    <div class="flip-card reveal">
+      <div class="flip-card-inner">
+        <div class="flip-front">
+          <div class="flip-icon">🤖</div>
+          <div class="flip-org">Anthropic</div>
+          <div class="flip-title">AI Fundamentals Course</div>
+          <div class="flip-hint"><i class="fas fa-sync-alt"></i> Hover to flip</div>
+        </div>
+        <div class="flip-back">
+          <div class="flip-back-title">AI Fundamentals</div>
+          <div class="flip-back-desc">Core concepts of AI including language models, prompt engineering, and responsible AI use through Anthropic's official curriculum.</div>
+          <div class="flip-badge">Anthropic Certified</div>
+        </div>
+      </div>
+    </div>
+
+    <div class="flip-card reveal">
+      <div class="flip-card-inner">
+        <div class="flip-front">
+          <div class="flip-icon">🧠</div>
+          <div class="flip-org">Anthropic</div>
+          <div class="flip-title">Prompt Engineering Course</div>
+          <div class="flip-hint"><i class="fas fa-sync-alt"></i> Hover to flip</div>
+        </div>
+        <div class="flip-back">
+          <div class="flip-back-title">Prompt Engineering</div>
+          <div class="flip-back-desc">Advanced techniques in crafting effective prompts — zero-shot, chain-of-thought, structured outputs, and real-world AI workflows.</div>
+          <div class="flip-badge">Anthropic Certified</div>
+        </div>
+      </div>
+    </div>
+
+    <div class="flip-card reveal">
+      <div class="flip-card-inner">
+        <div class="flip-front">
+          <div class="flip-icon">⚡</div>
+          <div class="flip-org">Anthropic</div>
+          <div class="flip-title">Claude API & Tools Course</div>
+          <div class="flip-hint"><i class="fas fa-sync-alt"></i> Hover to flip</div>
+        </div>
+        <div class="flip-back">
+          <div class="flip-back-title">Claude API & Tools</div>
+          <div class="flip-back-desc">Hands-on experience using the Claude API, tool use, vision capabilities, and building AI-powered applications at scale.</div>
+          <div class="flip-badge">Anthropic Certified</div>
+        </div>
+      </div>
+    </div>
+
+    <div class="flip-card reveal">
+      <div class="flip-card-inner">
+        <div class="flip-front">
+          <div class="flip-icon">🛡️</div>
+          <div class="flip-org">Anthropic</div>
+          <div class="flip-title">AI Safety & Ethics Course</div>
+          <div class="flip-hint"><i class="fas fa-sync-alt"></i> Hover to flip</div>
+        </div>
+        <div class="flip-back">
+          <div class="flip-back-title">AI Safety & Ethics</div>
+          <div class="flip-back-desc">Constitutional AI, alignment research, responsible deployment, and ethical frameworks for building safe AI systems.</div>
+          <div class="flip-badge">Anthropic Certified</div>
+        </div>
+      </div>
+    </div>
+
+    <div class="flip-card reveal">
+      <div class="flip-card-inner">
+        <div class="flip-front">
+          <div class="flip-icon">🌐</div>
+          <div class="flip-org">NASSCOM</div>
+          <div class="flip-title">Digital 101 Course</div>
+          <div class="flip-hint"><i class="fas fa-sync-alt"></i> Hover to flip</div>
+        </div>
+        <div class="flip-back">
+          <div class="flip-back-title">Digital 101</div>
+          <div class="flip-back-desc">Digital literacy covering Internet fundamentals, cybersecurity basics, e-governance, digital tools, and India's digital economy.</div>
+          <div class="flip-badge">NASSCOM Certified</div>
+        </div>
+      </div>
+    </div>
+
+    <div class="flip-card reveal">
+      <div class="flip-card-inner">
+        <div class="flip-front">
+          <div class="flip-icon">🐍</div>
+          <div class="flip-org">Cisco Networking Academy</div>
+          <div class="flip-title">Python Essentials 1</div>
+          <div class="flip-hint"><i class="fas fa-sync-alt"></i> Hover to flip</div>
+        </div>
+        <div class="flip-back">
+          <div class="flip-back-title">Python Essentials 1</div>
+          <div class="flip-back-desc">Python foundation — variables, data types, control flow, functions, modules, and OOP principles. Globally recognised Cisco curriculum.</div>
+          <div class="flip-badge">Cisco Certified</div>
+        </div>
+      </div>
+    </div>
+
+    <div class="flip-card reveal">
+      <div class="flip-card-inner">
+        <div class="flip-front">
+          <div class="flip-icon">🚀</div>
+          <div class="flip-org">Cisco Networking Academy</div>
+          <div class="flip-title">Python Essentials 2</div>
+          <div class="flip-hint"><i class="fas fa-sync-alt"></i> Hover to flip</div>
+        </div>
+        <div class="flip-back">
+          <div class="flip-back-title">Python Essentials 2</div>
+          <div class="flip-back-desc">Advanced Python — OOP deep dive, file I/O, exception handling, generators, decorators, and building real-world Python applications.</div>
+          <div class="flip-badge">Cisco Certified</div>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ═══════════ PROJECTS ═══════════ -->
+<section id="projects">
+  <div class="section-label reveal">What I've Built</div>
+  <h2 class="section-title reveal">Featured<br/><em>Projects</em></h2>
+
+  <div class="projects-filter reveal">
+    <button class="filter-btn active" data-filter="all">All</button>
+    <button class="filter-btn" data-filter="ai">AI / ML</button>
+    <button class="filter-btn" data-filter="web">Web</button>
+    <button class="filter-btn" data-filter="python">Python</button>
+  </div>
+
+  <div class="projects-grid">
+    <div class="project-card reveal" data-category="ai">
+      <div class="project-img">🤖<div class="project-overlay"><i class="fas fa-eye" style="font-size:2rem;color:var(--gold)"></i></div></div>
+      <div class="project-body">
+        <div class="project-tags"><span class="project-tag">AI</span><span class="project-tag">Python</span></div>
+        <h3 class="project-name">AI Chatbot Project</h3>
+        <p class="project-desc">A conversational AI assistant built using Python and Claude API, capable of answering questions and holding context-aware conversations.</p>
+        <div class="project-links"><a href="#" class="project-link"><i class="fab fa-github"></i> Code</a><a href="#" class="project-link"><i class="fas fa-external-link-alt"></i> Live</a></div>
+      </div>
+    </div>
+    <div class="project-card reveal" data-category="web">
+      <div class="project-img">🌐<div class="project-overlay"><i class="fas fa-eye" style="font-size:2rem;color:var(--gold)"></i></div></div>
+      <div class="project-body">
+        <div class="project-tags"><span class="project-tag">Web</span><span class="project-tag">Flask</span></div>
+        <h3 class="project-name">This Portfolio Website</h3>
+        <p class="project-desc">A fully custom Flask-powered portfolio with animations, flip cards, and smooth interactions — built from scratch, no templates.</p>
+        <div class="project-links"><a href="#" class="project-link"><i class="fab fa-github"></i> Code</a></div>
+      </div>
+    </div>
+    <div class="project-card reveal" data-category="python">
+      <div class="project-img">📊<div class="project-overlay"><i class="fas fa-eye" style="font-size:2rem;color:var(--gold)"></i></div></div>
+      <div class="project-body">
+        <div class="project-tags"><span class="project-tag">Python</span><span class="project-tag">Automation</span></div>
+        <h3 class="project-name">Python Automation Script</h3>
+        <p class="project-desc">A Python automation script that processes and visualises data — built as part of the Cisco Python Essentials projects.</p>
+        <div class="project-links"><a href="#" class="project-link"><i class="fab fa-github"></i> Code</a></div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ═══════════ SHAYARI ═══════════ -->
+<section id="shayari">
+  <div class="shayari-container">
+    <div class="section-label reveal" style="justify-content:center">Piyush's Shayari Corner</div>
+    <h2 class="section-title reveal" style="text-align:center">Words from<br/><em>the Heart</em></h2>
+    <div style="margin-top:3rem">
+      <div class="shayari-decoration">"</div>
+      <div class="shayari-poem" id="shayariDisplay">
+        <span class="line" id="line1"></span>
+        <span class="line" id="line2"></span>
+        <span class="line" id="line3"></span>
+        <span class="line" id="line4"></span>
+      </div>
+      <div class="shayari-divider"></div>
+      <div class="shayari-author">— Piyush Kulkarni</div>
+      <div class="shayari-dots" id="shayariDots"></div>
+    </div>
+  </div>
+</section>
+
+<!-- ═══════════ ACHIEVEMENTS ═══════════ -->
+<section id="achievements">
+  <div class="section-label reveal">Recognition</div>
+  <h2 class="section-title reveal">Achievements &<br/><em>Milestones</em></h2>
+  <div class="achievements-grid">
+    <div class="achievement-card reveal">
+      <div class="achievement-num">01</div>
+      <div class="achievement-icon"><i class="fas fa-certificate"></i></div>
+      <h3 class="achievement-title">7 Certifications</h3>
+      <p class="achievement-desc">All 4 Anthropic AI courses, NASSCOM Digital 101, and Cisco Python Essentials 1 & 2 — all completed and verified.</p>
+    </div>
+    <div class="achievement-card reveal">
+      <div class="achievement-num">02</div>
+      <div class="achievement-icon"><i class="fas fa-feather-alt"></i></div>
+      <h3 class="achievement-title">Shayar at Heart</h3>
+      <p class="achievement-desc">Dozens of original Urdu/Hindi shayaries celebrating love, dreams, and the everyday beauty of life.</p>
+    </div>
+    <div class="achievement-card reveal">
+      <div class="achievement-num">03</div>
+      <div class="achievement-icon"><i class="fas fa-baseball-ball"></i></div>
+      <h3 class="achievement-title">Cricket Player</h3>
+      <p class="achievement-desc">Active cricket player with team experience — developing leadership, strategy, and never-give-up attitude on and off the field.</p>
+    </div>
+    <div class="achievement-card reveal">
+      <div class="achievement-num">04</div>
+      <div class="achievement-icon"><i class="fas fa-university"></i></div>
+      <h3 class="achievement-title">MITAOE, IT Branch</h3>
+      <p class="achievement-desc">Pursuing B.Tech in Information Technology at MIT Academy of Engineering, Alandi, Pune — one of Maharashtra's top colleges.</p>
+    </div>
+  </div>
+</section>
+
+<!-- ═══════════ CONTACT ═══════════ -->
+<section id="contact">
+  <div class="section-label reveal">Let's Connect</div>
+  <h2 class="section-title reveal">Get In<br/><em>Touch</em></h2>
+  <div class="contact-grid">
+    <div class="contact-info reveal-left">
+      <div class="contact-item">
+        <div class="contact-icon"><i class="fas fa-envelope"></i></div>
+        <div class="contact-detail"><h4>Email</h4><p>your@email.com</p></div>
+      </div>
+      <div class="contact-item">
+        <div class="contact-icon"><i class="fas fa-phone"></i></div>
+        <div class="contact-detail"><h4>Phone</h4><p>+91 XXXXX XXXXX</p></div>
+      </div>
+      <div class="contact-item">
+        <div class="contact-icon"><i class="fas fa-university"></i></div>
+        <div class="contact-detail"><h4>College</h4><p>MITAOE, Alandi, Pune, Maharashtra</p></div>
+      </div>
+      <div class="contact-social">
+        <a href="#" class="social-link"><i class="fab fa-linkedin-in"></i></a>
+        <a href="#" class="social-link"><i class="fab fa-github"></i></a>
+        <a href="#" class="social-link"><i class="fab fa-twitter"></i></a>
+        <a href="#" class="social-link"><i class="fab fa-instagram"></i></a>
+      </div>
+    </div>
+
+    <div class="contact-form reveal-right">
+      <div class="form-row">
+        <div class="form-group"><label class="form-label">Your Name</label><input type="text" class="form-input" id="fname" placeholder="John Doe"/></div>
+        <div class="form-group"><label class="form-label">Your Email</label><input type="email" class="form-input" id="femail" placeholder="john@example.com"/></div>
+      </div>
+      <div class="form-group"><label class="form-label">Subject</label><input type="text" class="form-input" id="fsubject" placeholder="What's this about?"/></div>
+      <div class="form-group"><label class="form-label">Message</label><textarea class="form-textarea" id="fmessage" placeholder="Tell me something interesting..."></textarea></div>
+      <button class="form-btn" onclick="sendMessage()"><i class="fas fa-paper-plane"></i> &nbsp;Send Message</button>
+      <div class="form-success" id="formSuccess">✓ Message sent! I'll get back to you soon.</div>
+    </div>
+  </div>
+</section>
+
+<footer>
+  <div class="footer-logo">PK</div>
+  <div class="footer-copy">© 2025 Piyush Kulkarni · MITAOE IT · Made with <span class="footer-heart">♥</span> & Python</div>
+  <a href="#hero" class="footer-back"><i class="fas fa-arrow-up"></i></a>
+</footer>
+
+<script>
+  // CURSOR
+  const cursor = document.getElementById('cursor');
+  const ring = document.getElementById('cursorRing');
+  let mx=0,my=0,rx=0,ry=0;
+  document.addEventListener('mousemove', e => {
+    mx=e.clientX; my=e.clientY;
+    cursor.style.left=mx-6+'px'; cursor.style.top=my-6+'px';
+  });
+  (function animRing(){ rx+=(mx-rx)*0.12; ry+=(my-ry)*0.12; ring.style.left=rx-20+'px'; ring.style.top=ry-20+'px'; requestAnimationFrame(animRing); })();
+  document.querySelectorAll('a,button,.flip-card,.project-card,.achievement-card,.profile-flip-card').forEach(el=>{
+    el.addEventListener('mouseenter',()=>{cursor.style.transform='scale(2)';ring.style.transform='scale(1.5)';});
+    el.addEventListener('mouseleave',()=>{cursor.style.transform='scale(1)';ring.style.transform='scale(1)';});
+  });
+
+  // PROGRESS BAR
+  window.addEventListener('scroll',()=>{
+    const s=document.documentElement.scrollTop;
+    const h=document.documentElement.scrollHeight-window.innerHeight;
+    document.getElementById('progressBar').style.width=(s/h*100)+'%';
+    document.getElementById('navbar').classList.toggle('scrolled',window.scrollY>80);
+  });
+
+  // MOBILE MENU
+  document.getElementById('hamburger').addEventListener('click',()=>document.getElementById('mobileMenu').classList.toggle('open'));
+  function closeMobile(){ document.getElementById('mobileMenu').classList.remove('open'); }
+
+  // SCROLL REVEAL
+  const obs = new IntersectionObserver(entries=>{
+    entries.forEach(e=>{ if(e.isIntersecting) e.target.classList.add('visible'); });
+  },{threshold:0.12});
+  document.querySelectorAll('.reveal,.reveal-left,.reveal-right').forEach(el=>obs.observe(el));
+
+  // SKILL BARS
+  const skillObs = new IntersectionObserver(entries=>{
+    entries.forEach(e=>{
+      if(e.isIntersecting){
+        e.target.querySelectorAll('.skill-bar-fill').forEach(b=>b.style.width=b.dataset.width+'%');
+        skillObs.unobserve(e.target);
+      }
+    });
+  },{threshold:0.3});
+  const sb=document.getElementById('skillBars');
+  if(sb) skillObs.observe(sb);
+
+  // SHAYARI
+  const shayaris = [
+    ["Kuch sapne aankhon mein hain, kuch dil mein hai,","Zindagi ka safar abhi shuru hi hua hai.","Code likhta hoon roz, shayari bhi karta hoon,","Dono mein rooh hoon main, dono meri baat hain."],
+    ["Zindagi ek pitch hai, aur main khiladi,","Har ball ek chelenj, har run ek khushi.","Haar se darta nahi, khelta rahu main,","Jeet ka maza tab hai, jab mushkil ho rahi."],
+    ["AI ke zamane mein bhi, insaan ki zaroorat hai,","Python likhein ya Urdu, dil ki aawaaz suno.","Algorithms banaata hoon, shayari bhi likhta hoon,","Dono mein hai sukoon, dono se hai mohabbat."],
+    ["MITAOE ke galiyon mein, seekha maine bahut,","IT ki duniya mein, sapne bunne chahiye.","Har error ek sabak hai, har bug ek dost,","Code ka safar hai lamba, chalte rehna chahiye."]
+  ];
+  let cur=0;
+  const lines=['line1','line2','line3','line4'];
+  function renderDots(){
+    const d=document.getElementById('shayariDots'); d.innerHTML='';
+    shayaris.forEach((_,i)=>{
+      const dot=document.createElement('div');
+      dot.className='shayari-dot'+(i===cur?' active':'');
+      dot.onclick=()=>showShayari(i);
+      d.appendChild(dot);
+    });
+  }
+  function showShayari(idx){
+    cur=idx;
+    lines.forEach((id,i)=>{
+      const el=document.getElementById(id);
+      el.classList.remove('visible');
+      el.textContent=shayaris[idx][i];
+      setTimeout(()=>el.classList.add('visible'),i*200+100);
+    });
+    renderDots();
+  }
+  showShayari(0);
+  setInterval(()=>showShayari((cur+1)%shayaris.length),5000);
+
+  // PROJECT FILTER
+  document.querySelectorAll('.filter-btn').forEach(btn=>{
+    btn.addEventListener('click',function(){
+      document.querySelectorAll('.filter-btn').forEach(b=>b.classList.remove('active'));
+      this.classList.add('active');
+      const f=this.dataset.filter;
+      document.querySelectorAll('.project-card').forEach(c=>{
+        c.style.display=(f==='all'||c.dataset.category===f)?'block':'none';
+      });
+    });
+  });
+
+  // CONTACT FORM
+  async function sendMessage(){
+    const name=document.getElementById('fname').value;
+    const email=document.getElementById('femail').value;
+    const subject=document.getElementById('fsubject').value;
+    const message=document.getElementById('fmessage').value;
+    if(!name||!email||!message){alert('Please fill all required fields.');return;}
+    try{
+      const res=await fetch('/send_message',{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({name,email,subject,message})});
+      const data=await res.json();
+      if(data.status==='success'){
+        document.getElementById('formSuccess').style.display='block';
+        document.getElementById('fname').value='';
+        document.getElementById('femail').value='';
+        document.getElementById('fsubject').value='';
+        document.getElementById('fmessage').value='';
+      }
+    }catch(e){document.getElementById('formSuccess').style.display='block';}
+  }
+</script>
+</body>
+</html>
